@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine? 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Quicksand', sans-serif;
+    background: #fff0f3;
+    overflow: hidden;
+    position: relative;
+    transition: background 0.5s;
+  }
+
+  .hearts-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .floating-heart {
+    position: absolute;
+    font-size: 24px;
+    opacity: 0.15;
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.15; }
+    90% { opacity: 0.15; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  .card {
+    position: relative;
+    z-index: 10;
+    background: white;
+    border-radius: 32px;
+    padding: 48px 56px 56px;
+    text-align: center;
+    box-shadow:
+      0 4px 24px rgba(219, 39, 119, 0.08),
+      0 20px 60px rgba(219, 39, 119, 0.12);
+    max-width: 500px;
+    width: 90%;
+    animation: cardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    transition: all 0.5s;
+  }
+
+  @keyframes cardPop {
+    from { transform: scale(0.8) translateY(30px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+  }
+
+  .bear {
+    font-size: 80px;
+    line-height: 1;
+    margin-bottom: 8px;
+    animation: wiggle 2s ease-in-out infinite;
+    display: inline-block;
+    transition: all 0.3s;
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px) rotate(-2deg); }
+    40% { transform: translateX(8px) rotate(2deg); }
+    60% { transform: translateX(-6px) rotate(-1deg); }
+    80% { transform: translateX(6px) rotate(1deg); }
+  }
+
+  @keyframes dramaticCry {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 2rem;
+    color: #be185d;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    transition: all 0.3s;
+  }
+
+  .subtitle {
+    color: #9d174d;
+    font-size: 1rem;
+    margin-bottom: 36px;
+    font-weight: 600;
+    opacity: 0.7;
+    transition: all 0.3s;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    min-height: 80px;
+    position: relative;
+  }
+
+  .btn-yes {
+    background: linear-gradient(135deg, #ec4899, #be185d);
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    font-size: 1.2rem;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 20px rgba(236, 72, 153, 0.4);
+    letter-spacing: 0.5px;
+    z-index: 20;
+    position: relative;
+  }
+
+  .btn-yes:hover {
+    transform: scale(1.12);
+    box-shadow: 0 6px 30px rgba(236, 72, 153, 0.55);
+  }
+
+  .btn-no {
+    background: #f3f4f6;
+    color: #6b7280;
+    border: 2px solid #e5e7eb;
+    padding: 14px 32px;
+    font-size: 1rem;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    user-select: none;
+    z-index: 50;
+  }
+
+  .result {
+    display: none;
+    animation: resultPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .result.show { display: block; }
+
+  @keyframes resultPop {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .result .big-heart {
+    font-size: 100px;
+    display: inline-block;
+    animation: heartBeat 0.8s ease-in-out infinite alternate;
+  }
+
+  @keyframes heartBeat {
+    from { transform: scale(1); }
+    to { transform: scale(1.15); }
+  }
+
+  .result h2 {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.2rem;
+    color: #be185d;
+    margin: 12px 0 8px;
+  }
+
+  .result p {
+    color: #9d174d;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    animation: confettiFall 3s ease-out forwards;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  .attempt-counter {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: #d946a0;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .attempt-counter.show { opacity: 1; }
+
+  .sass-text {
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: #be185d;
+    font-weight: 700;
+    min-height: 24px;
+    transition: all 0.3s;
+  }
+
+  /* Stage styles */
+  .stage-annoyed .card { animation: shake 0.4s ease; }
+  .stage-crying .bear { animation: dramaticCry 1s ease-in-out infinite !important; }
+  .stage-angry { background: #fef2f2 !important; }
+  .stage-angry .card { border: 3px solid #fca5a5; }
+  .stage-begging .btn-yes { animation: pulse 0.6s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(236,72,153,0.5)} 50%{box-shadow:0 0 0 20px rgba(236,72,153,0)} }
+  .stage-panic { background: #fdf4ff !important; }
+  .stage-reverse .btn-no { animation: spin 1s linear infinite !important; }
+  .stage-glitch .card { animation: glitch 0.3s infinite; }
+  @keyframes glitch {
+    0%{transform:translate(0)} 20%{transform:translate(-3px,3px)} 40%{transform:translate(3px,-3px)}
+    60%{transform:translate(-2px,-2px)} 80%{transform:translate(2px,2px)} 100%{transform:translate(0)}
+  }
+  .stage-final { background: linear-gradient(135deg, #fdf2f8, #fce7f3, #fbcfe8) !important; }
+
+  /* Clone No buttons */
+  .clone-no {
+    position: fixed;
+    background: #f3f4f6;
+    color: #6b7280;
+    border: 2px solid #e5e7eb;
+    padding: 10px 24px;
+    font-size: 0.85rem;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    z-index: 40;
+    pointer-events: none;
+    opacity: 0.5;
+    transition: all 0.3s;
+  }
+
+  /* Popup overlay */
+  .popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(190, 24, 93, 0.2);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s;
+  }
+  .popup-overlay.show { display: flex; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  .popup-box {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    max-width: 380px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(190, 24, 93, 0.25);
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes popIn { from{transform:scale(0.5);opacity:0} to{transform:scale(1);opacity:1} }
+
+  .popup-box h3 {
+    font-family: 'Pacifico', cursive;
+    color: #be185d;
+    font-size: 1.4rem;
+    margin: 12px 0;
+  }
+  .popup-box p { color: #9d174d; font-weight: 600; margin-bottom: 20px; }
+
+  .popup-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .popup-btns button {
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .popup-btn-yes {
+    background: linear-gradient(135deg, #ec4899, #be185d);
+    color: white;
+    box-shadow: 0 4px 16px rgba(236, 72, 153, 0.4);
+  }
+  .popup-btn-yes:hover { transform: scale(1.08); }
+  .popup-btn-ok {
+    background: #fce7f3;
+    color: #be185d;
+  }
+
+  /* Love meter */
+  .love-bar-container {
+    margin-top: 16px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+  }
+  .love-bar-container.show { display: flex; }
+  .love-bar-label { font-size: 0.75rem; color: #d946a0; font-weight: 700; white-space: nowrap; }
+  .love-bar-track {
+    flex: 1;
+    height: 10px;
+    background: #fce7f3;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .love-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ec4899, #be185d);
+    border-radius: 10px;
+    transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    width: 0%;
+  }
+
+  /* Tear drops */
+  .tear {
+    position: fixed;
+    font-size: 20px;
+    pointer-events: none;
+    z-index: 60;
+    animation: tearDrop 1.5s ease-in forwards;
+  }
+  @keyframes tearDrop {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(200px) scale(0.3); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsBg"></div>
+
+<div class="card" id="card">
+  <div class="bear" id="bear">🧸</div>
+  <h1 id="title">Will You Be My Valentine?</h1>
+  <p class="subtitle" id="subtitle">Please choose wisely...</p>
+
+  <div class="buttons" id="buttons">
+    <button class="btn-yes" id="btnYes" onclick="sayYes()">Yes! 💕</button>
+    <button class="btn-no" id="btnNo">No 😢</button>
+  </div>
+
+  <div class="sass-text" id="sassText"></div>
+
+  <div class="love-bar-container" id="loveBar">
+    <span class="love-bar-label">Love meter:</span>
+    <div class="love-bar-track"><div class="love-bar-fill" id="loveBarFill"></div></div>
+    <span class="love-bar-label" id="lovePercent">0%</span>
+  </div>
+
+  <div class="attempt-counter" id="attemptCounter"></div>
+
+  <div class="result" id="result">
+    <div class="big-heart">💖</div>
+    <h2 id="resultTitle">Yaaay!</h2>
+    <p id="resultText">I knew you'd say yes! 🥰</p>
+  </div>
+</div>
+
+<!-- Popups -->
+<div class="popup-overlay" id="popup5">
+  <div class="popup-box">
+    <div style="font-size:60px">🥺</div>
+    <h3>Are you really sure?</h3>
+    <p>The bear is getting sad...</p>
+    <div class="popup-btns">
+      <button class="popup-btn-yes" onclick="closePopup('popup5'); sayYes();">OK fine, YES 💕</button>
+      <button class="popup-btn-ok" onclick="closePopup('popup5')">I'm heartless, continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="popup-overlay" id="popup10">
+  <div class="popup-box">
+    <div style="font-size:60px">😭</div>
+    <h3>THIS IS AN INTERVENTION</h3>
+    <p>10 times?! The bear is literally crying. Please reconsider.</p>
+    <div class="popup-btns">
+      <button class="popup-btn-yes" onclick="closePopup('popup10'); sayYes();">FINE. YES! 💕</button>
+      <button class="popup-btn-ok" onclick="closePopup('popup10')">I have no soul</button>
+    </div>
+  </div>
+</div>
+
+<div class="popup-overlay" id="popup15">
+  <div class="popup-box">
+    <div style="font-size:60px">💣</div>
+    <h3>FINAL WARNING</h3>
+    <p>The No button is about to self-destruct. This is your last chance to do the right thing.</p>
+    <div class="popup-btns">
+      <button class="popup-btn-yes" onclick="closePopup('popup15'); sayYes();">YES PLEASE DON'T EXPLODE! 💕</button>
+      <button class="popup-btn-ok" onclick="closePopup('popup15')">Destroy it, I dare you</button>
+    </div>
+  </div>
+</div>
+
+<div class="popup-overlay" id="popup20">
+  <div class="popup-box">
+    <div style="font-size:60px">🪦</div>
+    <h3>R.I.P. No Button</h3>
+    <p>2026 - 2026. Gone but not forgotten. It tried its best.</p>
+    <div class="popup-btns">
+      <button class="popup-btn-yes" onclick="closePopup('popup20'); sayYes();">Say YES in its honor 💕</button>
+      <button class="popup-btn-ok" onclick="closePopup('popup20')">Pour one out 🫗</button>
+    </div>
+  </div>
+</div>
+
+<div class="popup-overlay" id="popupFinal">
+  <div class="popup-box">
+    <div style="font-size:60px">🤷</div>
+    <h3>OK you win... kind of</h3>
+    <p>There's no more "No" button. There's only one option left. You know what to do.</p>
+    <div class="popup-btns">
+      <button class="popup-btn-yes" onclick="closePopup('popupFinal'); sayYes();">YES! 💕🎉</button>
+    </div>
+  </div>
+</div>
+
+<div class="confetti-container" id="confetti"></div>
+
+<script>
+  // Floating hearts
+  const heartsBg = document.getElementById('heartsBg');
+  const heartEmojis = ['💕','💗','💖','💘','❤️','💝','🩷','♥️'];
+  for (let i = 0; i < 25; i++) {
+    const heart = document.createElement('span');
+    heart.className = 'floating-heart';
+    heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+    heart.style.left = Math.random() * 100 + '%';
+    heart.style.fontSize = (16 + Math.random() * 24) + 'px';
+    heart.style.animationDuration = (8 + Math.random() * 12) + 's';
+    heart.style.animationDelay = -(Math.random() * 20) + 's';
+    heartsBg.appendChild(heart);
+  }
+
+  const btnNo = document.getElementById('btnNo');
+  const btnYes = document.getElementById('btnYes');
+  const bear = document.getElementById('bear');
+  const title = document.getElementById('title');
+  const subtitle = document.getElementById('subtitle');
+  const sassText = document.getElementById('sassText');
+  const attemptCounter = document.getElementById('attemptCounter');
+  const loveBar = document.getElementById('loveBar');
+  const loveBarFill = document.getElementById('loveBarFill');
+  const lovePercent = document.getElementById('lovePercent');
+  let noAttempts = 0;
+
+  const stages = [
+    // 1-4: Playful
+    { msg: "Haha, nice try! 😏", bear: "🧸", yesText: "Yes! 💕" },
+    { msg: "The button said NO to your No! 🙅", bear: "🧸", yesText: "Yes! 💕" },
+    { msg: "Wrong answer, try again! 😤", bear: "🧸", yesText: "Yes please! 💖" },
+    { msg: "Are you sure about that? 🤔", bear: "🧸", yesText: "YES! 💕" },
+    // 5: First popup + sad
+    { msg: "The bear is getting emotional... 🥺", bear: "🥺", title: "Please Be My Valentine?", yesText: "Okay YES! 💗", bodyClass: "stage-annoyed", popup: "popup5" },
+    // 6-9: Escalating sadness
+    { msg: "Roses are red, you can't click No 🌹", bear: "😿", yesText: "Say YES! 💘" },
+    { msg: "Error 404: 'No' not found 😂", bear: "😿", yesText: "YES already! 💝" },
+    { msg: "Your mouse is conspiring with me! 🐭", bear: "😢", title: "Pretty Please?", yesText: "YESSS! 💕", bodyClass: "stage-crying" },
+    { msg: "I'm not crying, YOU'RE crying! 😭", bear: "😭", yesText: "OKAY YES! 💖", tears: true },
+    // 10: Second popup + angry
+    { msg: "Now you've done it... 😤", bear: "😤", title: "SAY YES RIGHT NOW", yesText: "YES I'M SORRY! 💕", bodyClass: "stage-angry", popup: "popup10" },
+    // 11-14: Chaos
+    { msg: "The universe rejects your refusal! ✨", bear: "🤯", yesText: "YESYESYES! 💗", clones: 3 },
+    { msg: "I can do this ALL day... 💪", bear: "💪", title: "You WILL Be My Valentine", yesText: "I SURRENDER! YES! 💕", bodyClass: "stage-begging" },
+    { msg: "Even the button wants you to say yes!", bear: "🫠", yesText: "FINE, YES! 😩💕", clones: 5 },
+    { msg: "RESISTANCE. IS. FUTILE. 🤖", bear: "🤖", yesText: "OK OK OK YES!! 💖", bodyClass: "stage-panic" },
+    // 15: Third popup
+    { msg: "⚠️ No button self-destruct initiated...", bear: "💣", title: "LAST CHANCE", yesText: "YES PLEASE DON'T EXPLODE! 💕", popup: "popup15", bodyClass: "stage-glitch" },
+    // 16-19: Button dying
+    { msg: "The No button is fading... 👻", bear: "👻", title: "It's almost over...", yesText: "YES! Save the button! 💕" },
+    { msg: "No button health: ██░░░░░░ 25%", bear: "⚰️", yesText: "YES! I'll be your Valentine! 💖" },
+    { msg: "No button health: █░░░░░░░ 10%", bear: "🪦", title: "Say goodbye...", yesText: "YES! Don't let it die! 💕" },
+    { msg: "No button health: ░░░░░░░░ 1%...", bear: "😵", yesText: "YEEEES! 💕💕💕" },
+    // 20: Death popup
+    { msg: "☠️ The No button has perished.", bear: "🪦", title: "It's gone.", yesText: "YES! In loving memory 💕", popup: "popup20" },
+    // 21-24: Ghost mode
+    { msg: "👻 The ghost of No haunts you...", bear: "👀", title: "There's only YES now", yesText: "YES! (the only option) 💕" },
+    { msg: "Even in death, it couldn't stop love 💀", bear: "💀", yesText: "YES! Let love win! 💖" },
+    { msg: "Fun fact: you've wasted so much time on this 🤡", bear: "🤡", title: "At this point, just say yes", yesText: "...yes 💕" },
+    { msg: "You've spent more effort avoiding than accepting 😂", bear: "🫣", yesText: "ugh FINE. yes. 💕" },
+    // 25: Final popup - no more No
+    { msg: "🏳️ The No button surrenders forever.", bear: "🏳️", title: "Game Over", yesText: "✨ YES! ✨", popup: "popupFinal", bodyClass: "stage-final", removeNo: true },
+  ];
+
+  function closePopup(id) {
+    document.getElementById(id).classList.remove('show');
+  }
+
+  function spawnTears() {
+    for (let i = 0; i < 5; i++) {
+      const tear = document.createElement('span');
+      tear.className = 'tear';
+      tear.textContent = '💧';
+      const cardRect = document.getElementById('card').getBoundingClientRect();
+      tear.style.left = (cardRect.left + 80 + Math.random() * 200) + 'px';
+      tear.style.top = (cardRect.top + 40) + 'px';
+      tear.style.animationDelay = (Math.random() * 0.5) + 's';
+      document.body.appendChild(tear);
+      setTimeout(() => tear.remove(), 2000);
+    }
+  }
+
+  function spawnClones(count) {
+    document.querySelectorAll('.clone-no').forEach(c => c.remove());
+    for (let i = 0; i < count; i++) {
+      const clone = document.createElement('button');
+      clone.className = 'clone-no';
+      clone.textContent = 'No 😢';
+      clone.style.left = (Math.random() * (window.innerWidth - 100)) + 'px';
+      clone.style.top = (Math.random() * (window.innerHeight - 50)) + 'px';
+      clone.style.transform = `rotate(${-30 + Math.random()*60}deg) scale(${0.5 + Math.random()*0.5})`;
+      document.body.appendChild(clone);
+      setTimeout(() => {
+        clone.style.opacity = '0';
+        clone.style.transform += ' translateY(-100px)';
+        setTimeout(() => clone.remove(), 500);
+      }, 1500 + Math.random() * 1000);
+    }
+  }
+
+  function moveNoButton() {
+    noAttempts++;
+    const idx = Math.min(noAttempts - 1, stages.length - 1);
+    const stage = stages[idx];
+
+    sassText.textContent = stage.msg;
+    bear.textContent = stage.bear;
+    if (stage.title) title.textContent = stage.title;
+    btnYes.textContent = stage.yesText;
+
+    // Grow yes button
+    const pad = 16 + (noAttempts * 1.5);
+    const fs = 1.2 + (noAttempts * 0.04);
+    btnYes.style.padding = `${pad}px ${pad * 2.2}px`;
+    btnYes.style.fontSize = `${Math.min(fs, 2.2)}rem`;
+
+    // Love bar
+    loveBar.classList.add('show');
+    const pct = Math.min(100, noAttempts * 4);
+    loveBarFill.style.width = pct + '%';
+    lovePercent.textContent = pct + '%';
+
+    // Counter
+    attemptCounter.classList.add('show');
+    attemptCounter.textContent = `Failed "No" attempts: ${noAttempts} 😂`;
+
+    // Subtitle
+    if (noAttempts <= 4) subtitle.textContent = "Please choose wisely...";
+    else if (noAttempts <= 9) subtitle.textContent = "The bear is begging you...";
+    else if (noAttempts <= 14) subtitle.textContent = "This is getting ridiculous...";
+    else if (noAttempts <= 19) subtitle.textContent = "The No button is dying...";
+    else if (noAttempts <= 24) subtitle.textContent = "There is no escape from love.";
+    else subtitle.textContent = "💕 Just click the only button left 💕";
+
+    // Body class
+    document.body.className = '';
+    if (stage.bodyClass) document.body.classList.add(stage.bodyClass);
+
+    // Effects
+    if (stage.tears || (noAttempts >= 8 && noAttempts <= 12)) spawnTears();
+    if (stage.clones) spawnClones(stage.clones);
+
+    // Popup
+    if (stage.popup) {
+      setTimeout(() => {
+        document.getElementById(stage.popup).classList.add('show');
+      }, 300);
+    }
+
+    // Remove No at the end
+    if (stage.removeNo) {
+      btnNo.style.transition = 'all 0.5s';
+      btnNo.style.transform = 'scale(0) rotate(720deg)';
+      btnNo.style.opacity = '0';
+      setTimeout(() => { btnNo.style.display = 'none'; }, 600);
+      return;
+    }
+
+    // Move No button
+    if (noAttempts === 1) {
+      const btnRect = btnNo.getBoundingClientRect();
+      btnNo.style.position = 'fixed';
+      btnNo.style.left = btnRect.left + 'px';
+      btnNo.style.top = btnRect.top + 'px';
+      btnNo.style.zIndex = '50';
+    }
+
+    const viewW = window.innerWidth;
+    const viewH = window.innerHeight;
+    const btnW = btnNo.offsetWidth;
+    const btnH = btnNo.offsetHeight;
+    const newX = 20 + Math.random() * (viewW - btnW - 40);
+    const newY = 20 + Math.random() * (viewH - btnH - 40);
+
+    btnNo.style.left = newX + 'px';
+    btnNo.style.top = newY + 'px';
+    btnNo.style.transition = 'all 0.15s ease';
+
+    // Shrink after 15
+    if (noAttempts >= 15) {
+      const shrink = Math.max(0.3, 1 - (noAttempts - 14) * 0.1);
+      btnNo.style.transform = `scale(${shrink})`;
+    }
+    // Fade after 17
+    if (noAttempts >= 17) {
+      btnNo.style.opacity = Math.max(0.15, 1 - (noAttempts - 16) * 0.2);
+    }
+
+    // Change no text
+    const noTexts = ["No 😢","Nope","Still no","Stop asking","N-O","no...","n😢","🚫","nah","💔"];
+    btnNo.textContent = noTexts[Math.min(noAttempts - 1, noTexts.length - 1)];
+  }
+
+  btnNo.addEventListener('mouseenter', moveNoButton);
+  btnNo.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoButton(); });
+
+  function sayYes() {
+    document.getElementById('buttons').style.display = 'none';
+    sassText.style.display = 'none';
+    attemptCounter.style.display = 'none';
+    loveBar.style.display = 'none';
+    subtitle.style.display = 'none';
+    btnNo.style.display = 'none';
+    document.querySelectorAll('.clone-no').forEach(c => c.remove());
+    document.body.className = 'stage-final';
+
+    const resultTitle = document.getElementById('resultTitle');
+    const resultText = document.getElementById('resultText');
+
+    if (noAttempts === 0) {
+      resultTitle.textContent = "Instant YES! 🥰";
+      resultText.textContent = "No hesitation! You're the best Valentine ever!";
+    } else if (noAttempts <= 5) {
+      resultTitle.textContent = "Yaaay! 🥰";
+      resultText.textContent = "I knew you'd come around! Happy Valentine's Day!";
+    } else if (noAttempts <= 10) {
+      resultTitle.textContent = "FINALLY! 😭💕";
+      resultText.textContent = `It only took ${noAttempts} tries... but love wins!`;
+    } else if (noAttempts <= 20) {
+      resultTitle.textContent = "OH THANK GOD 😩💖";
+      resultText.textContent = `${noAttempts} attempts later... the bear can stop crying now!`;
+    } else {
+      resultTitle.textContent = "THE SAGA IS OVER! 🏆💕";
+      resultText.textContent = `${noAttempts} attempts! World record stubbornness. But love ALWAYS wins!`;
+    }
+
+    bear.textContent = '🥰';
+    bear.style.fontSize = '100px';
+    title.textContent = '💕 Happy Valentine\'s Day! 💕';
+
+    document.getElementById('result').classList.add('show');
+    launchConfetti();
+    setTimeout(launchConfetti, 800);
+    setTimeout(launchConfetti, 1600);
+  }
+
+  function launchConfetti() {
+    const container = document.getElementById('confetti');
+    const colors = ['#ec4899','#f472b6','#be185d','#fbbf24','#a78bfa','#34d399','#f87171','#fb923c','#c084fc','#22d3ee'];
+    for (let i = 0; i < 100; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + '%';
+      piece.style.top = -10 + 'px';
+      piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.width = (6 + Math.random() * 10) + 'px';
+      piece.style.height = (6 + Math.random() * 10) + 'px';
+      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+      piece.style.animationDelay = Math.random() * 1 + 's';
+      container.appendChild(piece);
+    }
+    setTimeout(() => { container.innerHTML = ''; }, 5000);
+  }
+</script>
+</body>
+</html>
