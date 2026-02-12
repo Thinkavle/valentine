@@ -14,7 +14,7 @@
   --text: #f0f0f5;
   --text-dim: #6e6e80;
   --pink: #ff2d78;
-  --pink-glow: rgba(128, 96, 107, 0.3);
+  --pink-glow: rgba(255, 45, 120, 0.3);
   --crack-opacity: 0;
 }
 
@@ -63,9 +63,9 @@ body {
 .phone {
   position: relative;
   z-index: 10;
-  width: 375px;
-  max-width: 95vw;
-  height: 720px;
+  width: 345px;
+  max-width: 90vw;
+  height: 655px;
   max-height: 90vh;
   background: var(--phone-bg);
   border-radius: 44px;
@@ -391,6 +391,37 @@ body {
   font-weight: 500;
 }
 
+/* Footer */
+.footer {
+  position: fixed;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 5;
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  letter-spacing: 1px;
+}
+.footer .letter {
+  display: inline-block;
+  background: linear-gradient(90deg, #ff2d78, #ff6b9d, #c084fc, #22d3ee, #ff2d78);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: footerShimmer 4s linear infinite, letterWave 2s ease-in-out infinite;
+  animation-delay: var(--d), var(--d);
+}
+@keyframes footerShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+@keyframes letterWave {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.1); }
+}
+
 /* Confetti */
 .confetti-piece {
   position: absolute;
@@ -435,18 +466,10 @@ body {
 
 <div class="ambient"></div>
 
+<div class="footer" id="footer"></div>
+
 <div class="phone" id="phone">
   <div class="crack-overlay" id="crackOverlay"></div>
-
-  <!-- Notification popup -->
-  <div class="notification" id="notification">
-    <div class="notif-icon" id="notifIcon">💕</div>
-    <div class="notif-text">
-      <div class="notif-app" id="notifApp">Messages</div>
-      <div class="notif-msg" id="notifMsg">You have a new message</div>
-    </div>
-  </div>
-
   <!-- Status bar -->
   <div class="status-bar">
     <span class="time" id="clock">9:41</span>
@@ -897,6 +920,17 @@ function launchConfetti() {
     setTimeout(() => piece.remove(), 4000);
   }
 }
+
+// Footer animation
+const footerText = "Developed By Khishgee";
+const footerEl = document.getElementById('footer');
+footerText.split('').forEach((char, i) => {
+  const span = document.createElement('span');
+  span.className = 'letter';
+  span.textContent = char === ' ' ? '\u00A0' : char;
+  span.style.setProperty('--d', `${i * 0.08}s`);
+  footerEl.appendChild(span);
+});
 
 // Start
 setTimeout(init, 400);
